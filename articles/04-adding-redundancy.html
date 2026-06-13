@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Do We Add Redundancy? — Quantum Error Correction</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚛</text></svg>">
+  <script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<div id="sidebar-overlay"></div>
+
+<nav id="sidebar">
+  <div id="sidebar-header">
+    <a class="book-title" href="../index.html">Quantum Error Correction</a>
+    <div class="book-author">by Boaz Micah</div>
+  </div>
+  <div id="sidebar-search">
+    <input id="sidebar-search-input" type="search" placeholder="Search articles… (press /)" aria-label="Search">
+  </div>
+  <div id="sidebar-nav">
+    <ul>
+<li class="section-label">Articles</li>
+<li class="nav-item"><a href="../articles/01-introduction.html"><span class="chapter-num">1.</span> Introduction</a></li>
+<li class="nav-item"><a href="../articles/02-classical-error-correction.html"><span class="chapter-num">2.</span> Classical Error Correction</a></li>
+<li class="nav-item"><a href="../articles/03-why-qec-is-hard.html"><span class="chapter-num">3.</span> Why QEC is Hard</a></li>
+<li class="nav-item"><a href="../articles/04-adding-redundancy.html" class="active"><span class="chapter-num">4.</span> Adding Redundancy</a></li>
+<li class="nav-item"><a href="../articles/05-bit-flip-errors.html"><span class="chapter-num">5.</span> Bit Flip Errors</a></li>
+<li class="nav-item"><a href="../articles/06-phase-errors.html"><span class="chapter-num">6.</span> Phase Errors</a></li>
+<li class="nav-item"><a href="../articles/07-shors-code.html"><span class="chapter-num">7.</span> Shor&#x27;s Code</a></li>
+<li class="nav-item"><a href="../articles/08-digitisation.html"><span class="chapter-num">8.</span> Digitisation of Errors</a></li>
+<li class="nav-item"><a href="../articles/09-simulating-shors-code.html"><span class="chapter-num">9.</span> Simulating with Stim</a></li>
+</ul>
+  </div>
+</nav>
+
+<div id="main-wrapper">
+  <div id="topbar">
+    <button id="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+    <span id="topbar-title">Quantum Error Correction</span>
+  </div>
+
+  <main id="content">
+    <h1>How Do We Add Redundancy?</h1>
+<div class="article-meta">
+  <span>6 min read</span>
+  <span>·</span>
+  <span>Boaz Micah</span>
+  <span class="tag">Quantum Error Correction</span>
+</div>
+<p>How do we add redundancy in</p>
+<p>quantum error correction?</p>
+<p>In the previous article, we identified three obstacles that make quantum</p>
+<p>error correction hard: the no-cloning theorem, the continuous nature of</p>
+<p>quantum errors, and the destructiveness of measurement. In this article,</p>
+<p>we tackle the first of these head-on: how do you add redundancy to</p>
+<p>quantum information without being allowed to copy it?</p>
+<div class="ellipsis-sep">· · ·</div>
+<h2>The Problem with Copying</h2>
+<p>In the classical repetition code, redundancy was straightforward:</p>
+<p>copy the logical bit three times, and use majority voting to recover</p>
+<p>from errors. The quantum analogue of this would be a map of the</p>
+<p>form:</p>
+<p>The no-cloning theorem tells us this is impossible. No physical</p>
+<p>operation can duplicate an unknown quantum state. So the most</p>
+<p>direct translation of the classical strategy is ruled out from the start.</p>
+<p>But this doesn’t mean redundancy is impossible. It just means we</p>
+<p>have to be more careful about what redundancy means in the</p>
+<p>quantum setting.</p>
+<h2>Redundancy Through Entanglement</h2>
+<p>In quantum information, redundancy is achieved not by copying, but</p>
+<p>by expanding the Hilbert space. Instead of duplicating the state, we</p>
+<p>entangle the qubit we want to protect with additional qubits,</p>
+<p>spreading the logical information across a larger system.</p>
+<p>To make this concrete, lets consider adding redundancy to a single</p>
+<p>qubit using three physical qubits. The circuit used to add redundancy</p>
+<p>is given below. It produces the encoding using two CNOT gates, with</p>
+<p>the original qubit as the control and the two extra qubits, initialised</p>
+<p>to |0⟩, as targets:</p>
+<p>The circuit takes the state |ψ⟩ = α|0⟩ + β|1⟩ and produces:</p>
+<p>where ||000⟩ and |111⟩ are the logical codewords. It is important to be</p>
+<p>clear about what this state is not. It is not a cloned state. Cloning</p>
+<p>would give:</p>
+<p>which expands into eight terms with all combinations of 0s and 1s.</p>
+<p>The encoded state α|000⟩ + β|111⟩ has only two terms: the three</p>
+<p>qubits are entangled, not independent copies. The quantum</p>
+<p>information has been distributed across the joint state of the system.</p>
+<h2>The Codespace</h2>
+<p>The encoding operation gives us a clean geometric picture of how</p>
+<p>redundancy enables error detection. Before encoding, the single</p>
+<p>qubit lives in a two-dimensional Hilbert space:</p>
+<p>After encoding with three physical qubits, the system lives in an</p>
+<p>eight-dimensional Hilbert space H₈. But the logical qubit doesn’t</p>
+<p>occupy all of it. It is confined to a two-dimensional subspace:</p>
+<p>This subspace C is called the codespace. It is the corner of the full</p>
+<p>Hilbert space where valid, uncorrupted logical states live.</p>
+<p>Now, suppose a bit-flip error occurs on the first qubit. The corrupted</p>
+<p>state becomes:</p>
+<p>This state is no longer in the codespace C. It has been rotated into a</p>
+<p>different two-dimensional subspace:</p>
+<p>We call F the error subspace. Crucially, C and F are mutually</p>
+<p>orthogonal: they share no overlap. This is the key insight. An</p>
+<p>uncorrupted logical state lives in C; a state that has suffered a bit-flip</p>
+<p>on the first qubit lives in F; and these two possibilities are, in</p>
+<p>principle, perfectly distinguishable.</p>
+<p>And here is where the geometry pays off. Because C and F are</p>
+<p>orthogonal, we can perform a projective measurement that</p>
+<p>determines which subspace the state occupies, without learning</p>
+<p>anything about the values of α and β.</p>
+<p>Think of the quantum state as a vector living in an eight-dimensional</p>
+<p>space, spanned by the eight computational basis states: {|000⟩, |001⟩,</p>
+<p>|010⟩, |011⟩, |100⟩, |101⟩, |110⟩, |111⟩}. When no error has occurred,</p>
+<p>the state lives entirely within the codespace. That is, it has</p>
+<p>components only along the |000⟩ and |111⟩ axes. Projecting onto any</p>
+<p>other axis gives zero.</p>
+<p>When an error occurs, the state is rotated out of the codespace. It</p>
+<p>now has a non-zero component along one of the other axes, and</p>
+<p>which axis that is tells us exactly what error occurred. We can detect</p>
+<p>this by performing a projective measurement that asks a simple</p>
+<p>question: which subspace does the state live in?</p>
+<p>Notice that this measurement never reveals the values of α and β. It</p>
+<p>only tells us which error subspace the state has been rotated into.</p>
+<h2>The actual quantum data we care about remains untouched</h2>
+<p>throughout. As such, we can detect the error without ever touching</p>
+<p>the logical information itself.</p>
+<div class="ellipsis-sep">· · ·</div>
+<h2>Now we have seen how redundancy is added in quantum error</h2>
+<p>correction. In the next article, we’ll make it concrete: introducing</p>
+<p>the quantum bit-flip code, and working through exactly how</p>
+<p>projective measurements are performed.</p>
+<div class="ellipsis-sep">· · ·</div>
+<p>Thanks for reading. If you found this useful, follow along for the rest of the</p>
+<p>series.</p>
+<div class="chapter-nav"><a href="03-why-qec-is-hard.html" class="nav-prev"><span class="nav-direction">← Previous</span>Why QEC is Hard</a><a href="05-bit-flip-errors.html" class="nav-next"><span class="nav-direction">Next →</span>Bit Flip Errors</a></div>
+  </main>
+
+  <footer id="footer">
+    Quantum Error Correction &mdash; Boaz Micah &mdash; 2026
+  </footer>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

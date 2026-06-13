@@ -1,0 +1,9 @@
+# Raw PDF source files (content already converted to HTML)
+qec_articles/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+*.swp
