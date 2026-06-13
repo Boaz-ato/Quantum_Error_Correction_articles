@@ -352,6 +352,17 @@ blockquote {
   line-height: 1.5;
 }
 
+/* ---- Article images ---- */
+.article-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem 0 2rem;
+  display: block;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
 /* ---- Math display styling ---- */
 .math-block {
   margin: 1.25rem 0;

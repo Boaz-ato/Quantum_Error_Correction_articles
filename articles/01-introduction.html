@@ -43,85 +43,39 @@
   </div>
 
   <main id="content">
-    <h1>Introduction: A Blog Series</h1>
+    <h1>Introduction: A Series on Quantum Error Correction</h1>
 <div class="article-meta">
-  <span>5 min read</span>
-  <span>·</span>
   <span>Boaz Micah</span>
-  <span class="tag">Quantum Error Correction</span>
 </div>
-<p>Quantum Error Correction: A</p>
-<p>Introduction: Why Protecting Quantum Information Is</p>
-<p>One of the Hardest Problems in Physics and</p>
-<h2>Computer Science</h2>
-<p>Quantum computers have the potential to revolutionise computing,</p>
-<p>harnessing two unique properties, entanglement and superposition,</p>
-<p>to solve problems that are practically intractable for classical</p>
-<p>computers. For instance, factorising large numbers: while this is</p>
-<p>believed to be computationally intractable for any classical</p>
-<p>computer, Shor’s algorithm run on a fault-tolerant quantum</p>
-<p>computer could do it in polynomial time. But there’s a catch!</p>
-<p>Quantum information is extraordinarily fragile. A qubit, unlike a</p>
-<p>classical bit, doesn’t just sit quietly in a 0 or 1 state. It lives in a</p>
-<p>delicate superposition state, sensitive to the faintest whisper of heat,</p>
-<p>stray electromagnetic fields, or even cosmic rays passing through the</p>
-<p>hardware. The environment is constantly trying to destroy your</p>
-<p>computation. This is called decoherence, and it is the central</p>
-<p>obstacle standing between us and a fault-tolerant quantum</p>
-<p>computer.</p>
-<p>This is not a minor engineering nuisance. Without error correction,</p>
-<p>a quantum computer running for even a few milliseconds will</p>
-<p>accumulate enough errors to make its output meaningless. Raw</p>
-<p>physical qubits, no matter how carefully engineered, are simply not</p>
-<p>reliable enough to run the deep circuits that make quantum</p>
-<p>computing interesting.</p>
-<p>The solution, at least in principle, is quantum error correction</p>
-<p>(QEC). The idea is: encode the information of one qubit using</p>
-<p>multiple qubits, in such a clever way that errors can be detected and</p>
-<p>corrected without ever learning what the qubit’s state actually is. The</p>
-<p>moment you measure a quantum state to check it, you collapse it.</p>
-<p>QEC has to thread a needle — diagnosing errors indirectly, through</p>
-<p>carefully chosen measurements that reveal what went wrong without</p>
-<p>revealing what the data is.</p>
-<p>That this is even possible is remarkable. That it has been proven to</p>
-<p>work, both theoretically and experimentally, is one of the great</p>
-<p>intellectual achievements of the past thirty years.</p>
-<div class="ellipsis-sep">· · ·</div>
+
+<img src="../images/article_1/0_PdY2ZjTv9UebHJmr.webp" alt="Quantum Error Correction" class="article-image">
+
+<p>Quantum computers have the potential to revolutionise computing, harnessing two unique properties, entanglement and superposition, to solve problems that are practically intractable for classical computers. For instance, factorising large numbers: while this is believed to be computationally intractable for any classical computer, Shor’s algorithm run on a fault-tolerant quantum computer could do it in polynomial time. But there’s a catch!</p>
+
+<p>Quantum information is extraordinarily fragile. A qubit, unlike a classical bit, doesn’t just sit quietly in a 0 or 1 state. It lives in a delicate superposition state, sensitive to the faintest whisper of heat, stray electromagnetic fields, or even cosmic rays passing through the hardware. The environment is constantly trying to destroy your computation. This is called decoherence, and it is the central obstacle standing between us and a fault-tolerant quantum computer.</p>
+
+<p>Without error correction, a quantum computer running for even a few milliseconds will accumulate enough errors to make its output meaningless. Raw physical qubits, no matter how carefully engineered, are simply not reliable enough to run the deep circuits that make quantum computing interesting.</p>
+
+<p>The solution, at least in principle, is quantum error correction (QEC). The idea is: encode the information of one qubit using multiple qubits, in such a clever way that errors can be detected and corrected without ever learning what the qubit’s state actually is. The moment you measure a quantum state to check it, you collapse it. QEC has to thread a needle — diagnosing errors indirectly, through carefully chosen measurements that reveal what went wrong without revealing what the data is.</p>
+
+<p>That this is even possible is remarkable. That it has been proven to work, both theoretically and experimentally, is one of the great intellectual achievements of the past thirty years.</p>
+
 <h2>What this series is about</h2>
-<p>This blog series tells the story of quantum error correction from the</p>
-<p>ground up. No shortcuts, no hand-waving.</p>
-<p>We start with classical error correction, not as a warmup, but</p>
-<p>because the contrast with the quantum case is genuinely</p>
-<p>illuminating. The moment you try to apply classical intuitions to</p>
-<p>quantum information, you run into three obstacles that seem, at</p>
-<p>first, to make error correction completely impossible. Working out</p>
-<p>why those obstacles aren’t fatal is where the interesting physics</p>
-<p>begins.</p>
-<p>From there, we build up the theory piece by piece: the first quantum</p>
-<p>codes, the algebraic framework that unifies them, and eventually the</p>
-<p>surface code: the code that Google, IBM, and Microsoft are all</p>
-<p>betting on as the path to fault-tolerant quantum computing. We won’t</p>
-<p>just describe it. We’ll simulate it, decode it, and measure its</p>
-<p>performance numerically.</p>
-<p>By the end, you’ll understand not just how quantum error correction</p>
-<p>works, but why it’s structured the way it is, and what still has to be</p>
-<p>solved before a fault-tolerant quantum computer becomes real.</p>
-<div class="ellipsis-sep">· · ·</div>
+
+<p>This series tells the story of quantum error correction from the ground up. No shortcuts, no hand-waving. We start with classical error correction, not as a warmup, but because the contrast with the quantum case is genuinely illuminating. The moment you try to apply classical intuitions to quantum information, you run into three obstacles that seem, at first, to make error correction completely impossible. Working out why those obstacles aren’t fatal is where the interesting physics begins.</p>
+
+<p>From there, we build up the theory piece by piece: the first quantum codes, the algebraic framework that unifies them, and eventually the surface code — the code that Google, IBM, and Microsoft are all betting on as the path to fault-tolerant quantum computing. We won’t just describe it. We’ll simulate it, decode it, and measure its performance numerically.</p>
+
+<p>By the end, you’ll understand not just how quantum error correction works, but why it’s structured the way it is, and what still has to be solved before a fault-tolerant quantum computer becomes real.</p>
+
 <h2>Who is this for?</h2>
-<p>If you’ve encountered quantum computing before and found the</p>
-<p>explanations either too shallow or too buried in formalism, this</p>
-<p>series is for you. The goal is to build genuine intuition, not just</p>
-<p>symbol-pushing, but a real understanding of why quantum error</p>
-<p>correction is structured the way it is.</p>
-<p>You’ll need to be comfortable with linear algebra and complex</p>
-<p>numbers. Beyond that, no prior quantum mechanics is assumed.</p>
-<p>Some articles are more mathematical, others more computational.</p>
-<p>The code examples are in Python.</p>
-<div class="ellipsis-sep">· · ·</div>
-<p>The story of quantum error correction is, in many ways, the story of</p>
-<p>whether large-scale quantum computing is possible at all. It sits at</p>
-<p>the intersection of physics, mathematics, computer science, and</p>
-<p>engineering in a way that few fields do.</p>
+
+<p>If you’ve encountered quantum computing before and found the explanations either too shallow or too buried in formalism, this series is for you. The goal is to build a real understanding of why quantum error correction is structured the way it is.</p>
+
+<p>You’ll need to be comfortable with linear algebra and complex numbers. Beyond that, no prior quantum mechanics is assumed. Some articles are more mathematical, others more computational. The code examples are in Python.</p>
+
+<p>The story of quantum error correction is, in many ways, the story of whether large-scale quantum computing is possible at all. It sits at the intersection of physics, mathematics, computer science, and engineering in a way that few fields do.</p>
+
 <p>Let’s dig in.</p>
 <div class="ellipsis-sep">· · ·</div>
 <h2>Next up: Classical Error Correction</h2>
