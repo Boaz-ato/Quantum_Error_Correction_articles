@@ -45,83 +45,9 @@
   <main id="content">
     <h1>Classical Error Correction</h1>
 <div class="article-meta">
-  <span>7 min read</span>
-  <span>·</span>
   <span>Boaz Micah</span>
-  <span class="tag">Quantum Error Correction</span>
 </div>
-<p>This is the first article in a series on quantum error correction, taking you from the</p>
-<p>fundamentals all the way to current research. We begin with classical error correction, the</p>
-<p>conceptual bedrock on which everything else is built.</p>
-<p>Error correction is everywhere. It’s why your music doesn’t skip when a CD gets</p>
-<p>scratched, why data survives a noisy Wi-Fi connection, and why spacecraft launched</p>
-<p>decades ago can still beam back reliable readings from the edge of the solar system.</p>
-<p>Whenever information is stored or transmitted through an imperfect medium,</p>
-<p>some mechanism is always needed to protect it. Understanding how that works</p>
-<p>classically is the essential first step before we can appreciate why the quantum case</p>
-<p>is so much harder.</p>
-<h2>A Simple Model of Noise</h2>
-<p>Let’s start with the simplest possible scenario. You have a single bit of information,</p>
-<p>initialised to 0. Over some storage time t, the bit is exposed to noise: it has a</p>
-<p>probability p of flipping its state, and a probability 1 − p of remaining unchanged.</p>
-<p>We call p the physical error rate.</p>
-<p>If we do nothing, the probability of receiving an error is simply p. For many real-</p>
-<p>world applications, storing data on a hard drive or sending a signal across a cable, a</p>
-<p>small p is unacceptable. We need a way to reduce the effective error rate below p,</p>
-<p>ideally by a large margin.</p>
-<h2>The Repetition Code</h2>
-<p>The most intuitive solution is redundancy: store the same information multiple</p>
-<p>times, so that a single error can be caught and outvoted. This idea is formalised as</p>
-<p>the repetition code, and it works in four steps. Let’s walk through the steps using the</p>
-<p>simple example of encoding a single bit with three bits.</p>
-<p>1. Encode. Map the single bit to multiple physical bits. For the 3-bit repetition</p>
-<p>code: 0 → 000 and 1 → 111. The three-bit string is called the codeword; the bit it</p>
-<p>represents is called the logical bit.</p>
-<p>2. Transmission through the noise channel. Each of the three physical bits</p>
-<p>independently has a probability p of flipping.</p>
-<p>3. Error detection. After storage, compare the three bits against each other. Any</p>
-<p>disagreement signals that an error has occurred somewhere.</p>
-<p>4. Error correction. Apply a majority vote: whichever value appears at least twice</p>
-<p>is taken to be the correct logical bit.</p>
-<p>Let’s trace through all the possible outcomes. With three bits and independent</p>
-<p>errors, there are eight possible states after the noise channel:</p>
-<p>The majority vote succeeds whenever at most one bit flips, and fails when two or more</p>
-<p>bits flip. A logical error, therefore, occurs only in the last four cases.</p>
-<h2>The Probability of Failure</h2>
-<p>The probability that two or more errors occur out of three independent bits, each</p>
-<p>with error rate p, is:</p>
-<p>Compare this to the unprotected error rate of p. The repetition code is an</p>
-<p>improvement whenever the p(fail) &lt; p .</p>
-<p>So, as long as the physical error rate is below 50%, the 3-bit repetition code gives us</p>
-<p>a lower logical error rate than doing nothing.</p>
-<h2>Code Distance</h2>
-<p>Notice that in our example, when three bit errors occur, the codeword, 000, changes</p>
-<p>into another valid codeword, 111. In this instance, there is no way of knowing that</p>
-<p>an error occurred.</p>
-<p>The key parameter here is the code distance d, the minimum number of bit flips</p>
-<p>needed to turn one valid codeword into another. For the n-bit repetition code, d = n.</p>
-<p>A code of distance d can correct up to ⌊(d−1)/2⌋ errors.</p>
-<p>This is an important concept to hold onto. As we move into quantum codes, code</p>
-<p>distance will be one of the central figures of merit, and we’ll be spending</p>
-<p>considerable effort designing codes with large distance using as few physical qubits</p>
-<p>as possible.</p>
-<h2>What Comes Next</h2>
-<p>We’ve seen that classical error correction works by adding redundancy and using</p>
-<p>majority voting. Simple, effective, and intuitive. Now the natural question is: can we</p>
-<p>do the same thing for quantum information?</p>
-<p>The answer is yes, but it requires confronting some obstacles. Quantum states can’t</p>
-<p>be copied (the no-cloning theorem), measuring a quantum state disturbs it, and</p>
-<p>errors don’t just come in one flavour: qubits can suffer both bit flips and phase flips.</p>
-<p>Phase flip errors are fundamentally different kinds of errors with no classical</p>
-<p>analogue.</p>
-<p>In the next article, we’ll explore exactly these challenges and see how quantum</p>
-<p>mechanics forces us to rethink error correction from the ground up.</p>
-<p>Thanks for reading. If you found this useful, follow along for the rest of the series. It gets</p>
-<p>much more interesting from here.</p>
-<p>Quantum Error Correction Quantum Computing Repetition Code</p>
-<p>Edit profile</p>
-<p>Written by Boaz Micah</p>
-<p>16 followers · 16 following</p>
+<p>...</p>
 <div class="chapter-nav"><a href="01-introduction.html" class="nav-prev"><span class="nav-direction">← Previous</span>Introduction</a><a href="03-why-qec-is-hard.html" class="nav-next"><span class="nav-direction">Next →</span>Why QEC is Hard</a></div>
   </main>
 
