@@ -379,6 +379,52 @@ figcaption {
   box-shadow: 0 2px 12px rgba(0,0,0,0.1);
 }
 
+/* ---- Tables ---- */
+table {
+  width: auto;
+  margin: 1.5rem auto 0.5rem;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+}
+
+thead tr {
+  background: var(--color-accent-light);
+  border-bottom: 2px solid var(--color-accent);
+}
+
+th {
+  padding: 0.55rem 1.25rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--color-heading);
+  white-space: nowrap;
+}
+
+td {
+  padding: 0.45rem 1.25rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: #f4f7fb;
+}
+
+.table-caption {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  text-align: center;
+  margin-top: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
 /* ---- Math display styling ---- */
 .math-block {
   margin: 1.25rem 0;

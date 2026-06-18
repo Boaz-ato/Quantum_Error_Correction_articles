@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detecting and Correcting Bit Flip Errors — Quantum Error Correction</title>
+  <title>Detecting and Correcting Bit Flip Errors &mdash; Quantum Error Correction</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" type="image/png" href="../favicon.png">
-  <script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
@@ -18,21 +19,21 @@
     <div class="book-author">by Boaz Micah</div>
   </div>
   <div id="sidebar-search">
-    <input id="sidebar-search-input" type="search" placeholder="Search articles… (press /)" aria-label="Search">
+    <input id="sidebar-search-input" type="search" placeholder="Search articles&hellip; (press /)" aria-label="Search">
   </div>
   <div id="sidebar-nav">
     <ul>
-<li class="section-label">Articles</li>
-<li class="nav-item"><a href="../articles/01-introduction.html"><span class="chapter-num">1.</span> Introduction</a></li>
-<li class="nav-item"><a href="../articles/02-classical-error-correction.html"><span class="chapter-num">2.</span> Classical Error Correction</a></li>
-<li class="nav-item"><a href="../articles/03-why-qec-is-hard.html"><span class="chapter-num">3.</span> Why QEC is Hard</a></li>
-<li class="nav-item"><a href="../articles/04-adding-redundancy.html"><span class="chapter-num">4.</span> Adding Redundancy</a></li>
-<li class="nav-item"><a href="../articles/05-bit-flip-errors.html" class="active"><span class="chapter-num">5.</span> Bit Flip Errors</a></li>
-<li class="nav-item"><a href="../articles/06-phase-errors.html"><span class="chapter-num">6.</span> Phase Errors</a></li>
-<li class="nav-item"><a href="../articles/07-shors-code.html"><span class="chapter-num">7.</span> Shor&#x27;s Code</a></li>
-<li class="nav-item"><a href="../articles/08-digitisation.html"><span class="chapter-num">8.</span> Digitisation of Errors</a></li>
-<li class="nav-item"><a href="../articles/09-simulating-shors-code.html"><span class="chapter-num">9.</span> Simulating with Stim</a></li>
-</ul>
+      <li class="section-label">Articles</li>
+      <li class="nav-item"><a href="../articles/01-introduction.html"><span class="chapter-num">1.</span> Introduction</a></li>
+      <li class="nav-item"><a href="../articles/02-classical-error-correction.html"><span class="chapter-num">2.</span> Classical Error Correction</a></li>
+      <li class="nav-item"><a href="../articles/03-why-qec-is-hard.html"><span class="chapter-num">3.</span> Why QEC is Hard</a></li>
+      <li class="nav-item"><a href="../articles/04-adding-redundancy.html"><span class="chapter-num">4.</span> Adding Redundancy</a></li>
+      <li class="nav-item"><a href="../articles/05-bit-flip-errors.html" class="active"><span class="chapter-num">5.</span> Bit Flip Errors</a></li>
+      <li class="nav-item"><a href="../articles/06-phase-errors.html"><span class="chapter-num">6.</span> Phase Errors</a></li>
+      <li class="nav-item"><a href="../articles/07-shors-code.html"><span class="chapter-num">7.</span> Shor&#x27;s Code</a></li>
+      <li class="nav-item"><a href="../articles/08-digitisation.html"><span class="chapter-num">8.</span> Digitisation of Errors</a></li>
+      <li class="nav-item"><a href="../articles/09-simulating-shors-code.html"><span class="chapter-num">9.</span> Simulating with Stim</a></li>
+    </ul>
   </div>
 </nav>
 
@@ -44,12 +45,103 @@
 
   <main id="content">
     <h1>Detecting and Correcting Bit Flip Errors</h1>
-<div class="article-meta">
-  <span>Boaz Micah</span>
-</div>
-<p>...</p>
+    <div class="article-meta">
+      <span>Boaz Micah</span>
+    </div>
 
-<div class="chapter-nav"><a href="04-adding-redundancy.html" class="nav-prev"><span class="nav-direction">← Previous</span>Adding Redundancy</a><a href="06-phase-errors.html" class="nav-next"><span class="nav-direction">Next →</span>Phase Errors</a></div>
+    <p>So far, we know that redundancy is added in quantum error correction (QEC) by expanding the Hilbert space. The encoded state is an entangled state that lives in a subspace (the codespace) of the full Hilbert space, and errors rotate the encoded state out of this codespace and into an error space. As such, QEC repeatedly asks the question: &ldquo;What subspace does the encoded state currently live in?&rdquo; To answer this, we need to perform projective measurements. The obvious question next is, what are these projective measurements? Here, let's try to answer this question in the context of detecting and correcting bit flip errors.</p>
+
+    <h2>Encoding a Single Qubit</h2>
+
+    <p>The first step in any QEC scheme is to encode the qubit we are trying to protect with redundancy. Here, we use a three-qubit repetition code, mapping a single qubit onto three physical qubits:</p>
+
+    \[
+      |\psi\rangle = \alpha|0\rangle + \beta|1\rangle
+      \longrightarrow
+      |\psi\rangle_L = \alpha|000\rangle + \beta|111\rangle = \alpha|0\rangle_L + \beta|1\rangle_L
+    \]
+
+    <p>The circuit below produces this encoding, using two CNOT gates:</p>
+
+    <img src="../images/article_5/0_FPHrmpJcdQGX-40R.webp" alt="Encoding circuit" class="article-image" style="width:50%;margin-left:auto;margin-right:auto;">
+
+    <h2>Parity Checking Circuit</h2>
+
+    <p>We assume that at most one bit flip can occur on the encoded state at any given time. Suppose a bit flip occurs on the second qubit. The encoded state becomes:</p>
+
+    \[
+      X_2|\psi_L\rangle = \alpha|010\rangle + \beta|101\rangle
+    \]
+
+    <p>Notice that the second qubit now disagrees with the first and third qubits. Our goal is to detect this disagreement without measuring the qubits directly. Measuring the qubit directly would collapse the superposition &mdash; yielding \(|010\rangle\) with probability \(|\alpha|^2\) or \(|101\rangle\) with probability \(|\beta|^2\) &mdash; and destroy the encoded information. We want the encoded state to stay intact.</p>
+
+    <p>To detect disagreement between qubits without disturbing their quantum state, we use a parity-checking circuit. Rather than measuring the qubits directly, this circuit encodes the answer to a simpler question: are these two qubits in the same state, or different states? The circuit is given below:</p>
+
+    <img src="../images/article_5/1_RjURueWf898Gy4m3R-8cvA.webp" alt="Parity checking circuit" class="article-image" style="width:50%;margin-left:auto;margin-right:auto;">
+
+    <h2>Putting It All Together</h2>
+
+    <p>With the parity-checking circuit in hand, we can now build a complete error detection and correction system. The circuit below combines the encoding and syndrome extraction stages into a single pipeline capable of detecting and correcting any single-qubit bit flip error.</p>
+
+    <img src="../images/article_5/1_b6sMvwWIiPiVS2tBy3M6yw.webp" alt="Full error correction circuit" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>The circuit has two stages:</p>
+
+    <ul>
+      <li><strong>Encoding stage</strong> (before the barrier line): spreads the logical qubit across three physical qubits.</li>
+      <li><strong>Syndrome extraction stage:</strong> two ancilla qubits are used to measure the parity of pairs of data qubits.</li>
+    </ul>
+
+    <p>The two bits of the error syndrome tell us:</p>
+
+    <ul>
+      <li>Whether qubits 1 and 2 are the same or different.</li>
+      <li>Whether qubits 2 and 3 are the same or different.</li>
+    </ul>
+
+    <p>In the circuit, a bit-flip error occurs on the second qubit. This gives an error syndrome of 11. The error is corrected by applying an \(X\) gate on the second qubit.</p>
+
+    <h2>The Error Syndrome Table</h2>
+
+    <p>The full set of possible syndromes and their corresponding errors is shown below:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syndrome \((M_0\, M_1)\)</th>
+          <th>Error</th>
+          <th>Qubit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>00</td><td>No error</td><td>&mdash;</td></tr>
+        <tr><td>10</td><td>Bit flip \(X\)</td><td>\(q_0\)</td></tr>
+        <tr><td>11</td><td>Bit flip \(X\)</td><td>\(q_1\)</td></tr>
+        <tr><td>01</td><td>Bit flip \(X\)</td><td>\(q_2\)</td></tr>
+      </tbody>
+    </table>
+    <p class="table-caption">Error syndromes for the 3-qubit bit-flip repetition code. \(M_0\) and \(M_1\) are the measurement outcomes of ancilla qubits \(q_3\) and \(q_4\), respectively.</p>
+
+    <p>Three key properties of the error syndrome are worth noting:</p>
+
+    <ul>
+      <li><strong>It contains no information about the encoded state.</strong> The syndrome tells us which qubit a bit-flip error occurred on, but reveals nothing about the values of \(\alpha\) and \(\beta\). The quantum information being protected remains untouched.</li>
+      <li><strong>It uniquely identifies the faulty qubit.</strong> Each single-qubit bit flip maps to a distinct syndrome, allowing unambiguous error identification.</li>
+      <li><strong>The measurement is non-demolition.</strong> Measuring the ancilla qubits projects the full system into one of four orthogonal subspaces of \(\mathcal{H}_8\). For instance, the 00 syndrome projects into the codespace spanned by \(\{|000\rangle, |111\rangle\}\), leaving the superposition \(\alpha|000\rangle + \beta|111\rangle\) completely undisturbed. The syndrome determines which subspace the state occupies, not the logical information within it.</li>
+    </ul>
+
+    <h2>Recovery</h2>
+
+    <p>Once we have the syndrome, recovery is straightforward: we simply apply the corrective operation indicated by the syndrome table. For example, a syndrome of 11 tells us that qubit \(q_1\) was flipped, so we apply an \(X\) gate to \(q_1\) to restore the original encoded state.</p>
+
+    <p>It is important to note that this three-qubit code can only correct single-bit flip errors. To handle more errors simultaneously, we need to increase the code distance of the encoding. Recall that a code of distance \(d\) can correct up to \(\left\lfloor\frac{d-1}{2}\right\rfloor\) errors.</p>
+
+    <p>Next, we will look at how to detect and correct phase errors, a type of error with no classical analogue, as we continue exploring the challenges of quantum error correction.</p>
+
+    <div class="chapter-nav">
+      <a href="04-adding-redundancy.html" class="nav-prev"><span class="nav-direction">&larr; Previous</span>Adding Redundancy</a>
+      <a href="06-phase-errors.html" class="nav-next"><span class="nav-direction">Next &rarr;</span>Phase Errors</a>
+    </div>
   </main>
 
   <footer id="footer">
