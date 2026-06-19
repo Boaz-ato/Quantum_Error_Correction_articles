@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Digitisation of Quantum Errors — Quantum Error Correction</title>
+  <title>The Digitisation of Quantum Errors &mdash; Quantum Error Correction</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" type="image/png" href="../favicon.png">
-  <script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
@@ -18,21 +19,21 @@
     <div class="book-author">by Boaz Micah</div>
   </div>
   <div id="sidebar-search">
-    <input id="sidebar-search-input" type="search" placeholder="Search articles… (press /)" aria-label="Search">
+    <input id="sidebar-search-input" type="search" placeholder="Search articles&hellip; (press /)" aria-label="Search">
   </div>
   <div id="sidebar-nav">
     <ul>
-<li class="section-label">Articles</li>
-<li class="nav-item"><a href="../articles/01-introduction.html"><span class="chapter-num">1.</span> Introduction</a></li>
-<li class="nav-item"><a href="../articles/02-classical-error-correction.html"><span class="chapter-num">2.</span> Classical Error Correction</a></li>
-<li class="nav-item"><a href="../articles/03-why-qec-is-hard.html"><span class="chapter-num">3.</span> Why QEC is Hard</a></li>
-<li class="nav-item"><a href="../articles/04-adding-redundancy.html"><span class="chapter-num">4.</span> Adding Redundancy</a></li>
-<li class="nav-item"><a href="../articles/05-bit-flip-errors.html"><span class="chapter-num">5.</span> Bit Flip Errors</a></li>
-<li class="nav-item"><a href="../articles/06-phase-errors.html"><span class="chapter-num">6.</span> Phase Errors</a></li>
-<li class="nav-item"><a href="../articles/07-shors-code.html"><span class="chapter-num">7.</span> Shor&#x27;s Code</a></li>
-<li class="nav-item"><a href="../articles/08-digitisation.html" class="active"><span class="chapter-num">8.</span> Digitisation of Errors</a></li>
-<li class="nav-item"><a href="../articles/09-simulating-shors-code.html"><span class="chapter-num">9.</span> Simulating with Stim</a></li>
-</ul>
+      <li class="section-label">Articles</li>
+      <li class="nav-item"><a href="../articles/01-introduction.html"><span class="chapter-num">1.</span> Introduction</a></li>
+      <li class="nav-item"><a href="../articles/02-classical-error-correction.html"><span class="chapter-num">2.</span> Classical Error Correction</a></li>
+      <li class="nav-item"><a href="../articles/03-why-qec-is-hard.html"><span class="chapter-num">3.</span> Why QEC is Hard</a></li>
+      <li class="nav-item"><a href="../articles/04-adding-redundancy.html"><span class="chapter-num">4.</span> Adding Redundancy</a></li>
+      <li class="nav-item"><a href="../articles/05-bit-flip-errors.html"><span class="chapter-num">5.</span> Bit Flip Errors</a></li>
+      <li class="nav-item"><a href="../articles/06-phase-errors.html"><span class="chapter-num">6.</span> Phase Errors</a></li>
+      <li class="nav-item"><a href="../articles/07-shors-code.html"><span class="chapter-num">7.</span> Shor&#x27;s Code</a></li>
+      <li class="nav-item"><a href="../articles/08-digitisation.html" class="active"><span class="chapter-num">8.</span> Digitisation of Errors</a></li>
+      <li class="nav-item"><a href="../articles/09-simulating-shors-code.html"><span class="chapter-num">9.</span> Simulating with Stim</a></li>
+    </ul>
   </div>
 </nav>
 
@@ -44,11 +45,92 @@
 
   <main id="content">
     <h1>The Digitisation of Quantum Errors</h1>
-<div class="article-meta">
-  <span>Boaz Micah</span>
-</div>
-<p>...</p>
-<div class="chapter-nav"><a href="07-shors-code.html" class="nav-prev"><span class="nav-direction">← Previous</span>Shor&#x27;s Code</a><a href="09-simulating-shors-code.html" class="nav-next"><span class="nav-direction">Next →</span>Simulating with Stim</a></div>
+    <div class="article-meta">
+      <span>Boaz Micah</span>
+    </div>
+
+    <p>So far, we have learnt how to detect and correct both bit-flips and phase errors using Shor's code. We also understand that quantum errors are continuous and there are infinitely many ways to corrupt the state we are trying to protect. This begs the question: why have we been fixated only on detecting and correcting bit-flips and phase errors? It turns out that being able to detect and correct bit-flips and phase errors is enough to correct any arbitrary single-qubit error.</p>
+
+    <h2>The Bloch Sphere</h2>
+
+    <p>To begin, let's introduce the Bloch sphere. We have been representing the state of a qubit as \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\). We can rewrite this in a different form:</p>
+
+    \[
+      |\psi\rangle = \cos\frac{\theta}{2}|0\rangle + e^{i\phi}\sin\frac{\theta}{2}|1\rangle
+    \]
+
+    <p>The probability amplitudes still satisfy the usual normalisation condition. In this form, every possible qubit state corresponds to a point on the surface of a sphere, determined by the two angles \(\theta\) and \(\phi\), called the Bloch sphere.</p>
+
+    <img src="../images/article_8/bloch.webp" alt="The Bloch sphere" class="article-image" style="width:40%;margin-left:auto;margin-right:auto;">
+
+    <p>An error acting on a qubit can be pictured as a rotation: it moves the state from one point on the sphere to another. More precisely, an error takes the form:</p>
+
+    \[
+      U(\delta\theta,\, \delta\phi)\,|\psi\rangle
+      = \cos\frac{\theta + \delta\theta}{2}|0\rangle
+      + e^{i(\phi + \delta\phi)}\sin\frac{\theta + \delta\theta}{2}|1\rangle
+    \]
+
+    <p>where \(\delta\theta\) and \(\delta\phi\) describe how far the state has been displaced. Since these shifts can be any real numbers, the space of possible errors is continuous and infinite. At first glance, correcting all of these errors seems to require a vastly complex procedure. Luckily, it does not. Quantum errors can be digitised.</p>
+
+    <h2>The Pauli Matrices</h2>
+
+    <p>To understand digitisation, we first need to introduce the Pauli matrices &mdash; a set of four simple quantum operations that act on a single qubit:</p>
+
+    \[
+      I = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}, \quad
+      X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \quad
+      Y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}, \quad
+      Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}
+    \]
+
+    <p>The \(X\) gate is the quantum analogue of a classical bit flip: it sends \(|0\rangle\) to \(|1\rangle\) and \(|1\rangle\) to \(|0\rangle\). The \(Z\) gate, called a phase flip, has no classical analogue: it leaves \(|0\rangle\) unchanged and sends \(|1\rangle\) to \(-|1\rangle\). On the Bloch sphere, \(X\) corresponds to a \(\pi\) rotation about the \(x\)-axis, and \(Z\) to a \(\pi\) rotation about the \(z\)-axis.</p>
+
+    <p>The key fact is this: any single-qubit error can be written as a linear combination of these four operations:</p>
+
+    \[
+      U(\delta\theta,\, \delta\phi)\,|\psi\rangle
+      = \alpha_I\, \mathbb{1}|\psi\rangle
+      + \alpha_X\, X|\psi\rangle
+      + \alpha_Z\, Z|\psi\rangle
+      + \alpha_{XZ}\, XZ|\psi\rangle
+    \]
+
+    <p>The error, however complicated, is always a superposition of just four possibilities: no error, a bit flip, a phase flip, or both simultaneously.</p>
+
+    <h2>Projective Measurement</h2>
+
+    <p>Knowing this decomposition is only useful if we can act on it. The key step is to perform a projective measurement &mdash; one that forces the corrupted qubit to collapse into exactly one of these four error branches.</p>
+
+    <p>Rather than measuring the data qubit directly, which would destroy the encoded information, we introduce an ancilla qubit and allow it to interact with the data qubit in a carefully chosen way. We then measure only the ancilla. The measurement result, called the <em>syndrome</em>, tells us which branch the error collapsed into, without ever revealing what the logical qubit's state actually was.</p>
+
+    <p>If the syndrome indicates no error has occurred, we do nothing. If it indicates an \(X\) error, we apply \(X\) to undo it. If it indicates a \(Z\) error, we apply \(Z\). If it indicates both, we apply \(Z\) followed by \(X\). In every case, we can correct the error exactly.</p>
+
+    <blockquote>This is the miracle of digitisation: even though quantum errors are continuous, a well-chosen measurement collapses them into a discrete set. We never need to correct infinitely many error types &mdash; only three.</blockquote>
+
+    <p>The same logic extends to two-qubit errors. Any noise acting on a pair of qubits can equally be decomposed in terms of \(X\) and \(Z\) gates, now acting on each qubit individually or jointly. So even for two-qubit interactions, we only ever need to detect and correct bit flips and phase flips.</p>
+
+    <h2>What the Hardware Must Guarantee</h2>
+
+    <p>Digitisation simplifies the software side of error correction enormously. But it does not eliminate hardware requirements. For this error model to apply, the physical device must satisfy two conditions:</p>
+
+    <ul>
+      <li><strong>True two-level systems.</strong> Each qubit must have a computational basis of exactly \(|0\rangle\) and \(|1\rangle\), with no leakage into higher energy levels.</li>
+      <li><strong>Circuit-level noise.</strong> We must be able to model noise as occurring at specific moments in the circuit: after single-qubit gates, after two-qubit gates, before measurements, and after initialisation.</li>
+    </ul>
+
+    <img src="../images/article_8/error_model.webp" alt="Circuit-level noise model" class="article-image" style="width:80%;margin-left:auto;margin-right:auto;">
+
+    <p>If these conditions hold, then detecting and correcting bit flips and phase flips in software is sufficient. All remaining errors are either already in this form or collapse into it upon measurement.</p>
+
+    <blockquote>If the hardware can be trusted to produce only \(X\) and \(Z\) errors, the software can handle the rest.</blockquote>
+
+    <p>Next, we will introduce Stim, a tool used for the simulation of quantum error correction protocols, and use it to simulate Shor's code under different error conditions.</p>
+
+    <div class="chapter-nav">
+      <a href="07-shors-code.html" class="nav-prev"><span class="nav-direction">&larr; Previous</span>Shor&#x27;s Code</a>
+      <a href="09-simulating-shors-code.html" class="nav-next"><span class="nav-direction">Next &rarr;</span>Simulating with Stim</a>
+    </div>
   </main>
 
   <footer id="footer">
