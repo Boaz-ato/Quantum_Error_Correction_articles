@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detecting and Correcting Phase Errors — Quantum Error Correction</title>
+  <title>Detecting and Correcting Phase Errors &mdash; Quantum Error Correction</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" type="image/png" href="../favicon.png">
-  <script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
@@ -18,21 +19,21 @@
     <div class="book-author">by Boaz Micah</div>
   </div>
   <div id="sidebar-search">
-    <input id="sidebar-search-input" type="search" placeholder="Search articles… (press /)" aria-label="Search">
+    <input id="sidebar-search-input" type="search" placeholder="Search articles&hellip; (press /)" aria-label="Search">
   </div>
   <div id="sidebar-nav">
     <ul>
-<li class="section-label">Articles</li>
-<li class="nav-item"><a href="../articles/01-introduction.html"><span class="chapter-num">1.</span> Introduction</a></li>
-<li class="nav-item"><a href="../articles/02-classical-error-correction.html"><span class="chapter-num">2.</span> Classical Error Correction</a></li>
-<li class="nav-item"><a href="../articles/03-why-qec-is-hard.html"><span class="chapter-num">3.</span> Why QEC is Hard</a></li>
-<li class="nav-item"><a href="../articles/04-adding-redundancy.html"><span class="chapter-num">4.</span> Adding Redundancy</a></li>
-<li class="nav-item"><a href="../articles/05-bit-flip-errors.html"><span class="chapter-num">5.</span> Bit Flip Errors</a></li>
-<li class="nav-item"><a href="../articles/06-phase-errors.html" class="active"><span class="chapter-num">6.</span> Phase Errors</a></li>
-<li class="nav-item"><a href="../articles/07-shors-code.html"><span class="chapter-num">7.</span> Shor&#x27;s Code</a></li>
-<li class="nav-item"><a href="../articles/08-digitisation.html"><span class="chapter-num">8.</span> Digitisation of Errors</a></li>
-<li class="nav-item"><a href="../articles/09-simulating-shors-code.html"><span class="chapter-num">9.</span> Simulating with Stim</a></li>
-</ul>
+      <li class="section-label">Articles</li>
+      <li class="nav-item"><a href="../articles/01-introduction.html"><span class="chapter-num">1.</span> Introduction</a></li>
+      <li class="nav-item"><a href="../articles/02-classical-error-correction.html"><span class="chapter-num">2.</span> Classical Error Correction</a></li>
+      <li class="nav-item"><a href="../articles/03-why-qec-is-hard.html"><span class="chapter-num">3.</span> Why QEC is Hard</a></li>
+      <li class="nav-item"><a href="../articles/04-adding-redundancy.html"><span class="chapter-num">4.</span> Adding Redundancy</a></li>
+      <li class="nav-item"><a href="../articles/05-bit-flip-errors.html"><span class="chapter-num">5.</span> Bit Flip Errors</a></li>
+      <li class="nav-item"><a href="../articles/06-phase-errors.html" class="active"><span class="chapter-num">6.</span> Phase Errors</a></li>
+      <li class="nav-item"><a href="../articles/07-shors-code.html"><span class="chapter-num">7.</span> Shor&#x27;s Code</a></li>
+      <li class="nav-item"><a href="../articles/08-digitisation.html"><span class="chapter-num">8.</span> Digitisation of Errors</a></li>
+      <li class="nav-item"><a href="../articles/09-simulating-shors-code.html"><span class="chapter-num">9.</span> Simulating with Stim</a></li>
+    </ul>
   </div>
 </nav>
 
@@ -44,11 +45,116 @@
 
   <main id="content">
     <h1>Detecting and Correcting Phase Errors</h1>
-<div class="article-meta">
-  <span>Boaz Micah</span>
-</div>
-<p>...</p>
-<div class="chapter-nav"><a href="05-bit-flip-errors.html" class="nav-prev"><span class="nav-direction">← Previous</span>Bit Flip Errors</a><a href="07-shors-code.html" class="nav-next"><span class="nav-direction">Next →</span>Shor&#x27;s Code</a></div>
+    <div class="article-meta">
+      <span>Boaz Micah</span>
+    </div>
+
+    <p>We have introduced the circuit used to detect bit flip errors. Next, let's see how we can detect phase errors.</p>
+
+    <h2>Can We Use the Same Circuit?</h2>
+
+    <p>Suppose that a qubit in the state \(\alpha|0\rangle + \beta|1\rangle\) has been encoded using three physical qubits, and a phase-flip error occurs on the middle qubit. This results in the state:</p>
+
+    \[
+      (\mathbb{I} \otimes Z \otimes \mathbb{I})(\alpha|000\rangle + \beta|111\rangle) = \alpha|000\rangle - \beta|111\rangle
+    \]
+
+    <p>After a phase-flip error on the middle qubit, the corrupted state remains a valid codeword &mdash; it still has components only along \(|000\rangle\) and \(|111\rangle\), placing it within the codespace. The syndrome measurement returns 00 every time, falsely indicating no error.</p>
+
+    <p>The syndrome outcome is the same regardless of which qubit the phase error occurred on. The bit-flip detection circuit has no way to distinguish a phase-corrupted state from the original state. We therefore need a different approach to catch phase-flip errors.</p>
+
+    <h2>The Hadamard Transform</h2>
+
+    <p>To understand how to detect phase errors, we first analyse how the Hadamard gate acts on the computational basis. Recall:</p>
+
+    \begin{align}
+      H|0\rangle &= \frac{|0\rangle + |1\rangle}{\sqrt{2}} = |+\rangle \\[4pt]
+      H|1\rangle &= \frac{|0\rangle - |1\rangle}{\sqrt{2}} = |-\rangle
+    \end{align}
+
+    <p>The Hadamard gate rotates the basis of the vector space from \(\{|0\rangle, |1\rangle\}\) to \(\{|+\rangle, |-\rangle\}\). To see why this is useful, recall how the \(X\) and \(Z\) gates act on the computational basis:</p>
+
+    \begin{align}
+      X(\alpha|0\rangle + \beta|1\rangle) &= \alpha|1\rangle + \beta|0\rangle \\[4pt]
+      Z(\alpha|0\rangle + \beta|1\rangle) &= \alpha|0\rangle - \beta|1\rangle
+    \end{align}
+
+    <p>Now consider how these gates act in the \(\{|+\rangle, |-\rangle\}\) basis instead:</p>
+
+    \begin{align}
+      X|+\rangle &= |+\rangle, \quad X|-\rangle = -|-\rangle \qquad \text{(acts like a phase flip)} \\[4pt]
+      Z|+\rangle &= |-\rangle, \quad Z|-\rangle = |+\rangle \qquad \text{(acts like a bit flip)}
+    \end{align}
+
+    <p>In the \(\{|+\rangle, |-\rangle\}\) basis, \(X\) acts as a phase flip and \(Z\) acts as a bit flip &mdash; exactly swapping the roles of the two error types.</p>
+
+    <blockquote>The Hadamard transform exchanges bit-flip and phase-flip errors.</blockquote>
+
+    <p>This is the key insight: if we work in the \(\{|+\rangle, |-\rangle\}\) basis, we can apply the exact same parity-checking methodology used for bit-flip errors to detect phase-flip errors instead.</p>
+
+    <h2>Encoding Circuit for Phase Flip Errors</h2>
+
+    <p>The encoding circuit for phase errors closely mirrors the one used for bit flip errors, again using three physical qubits to represent a single logical qubit:</p>
+
+    <img src="../images/article_6/1_UXOtXyJOOI71mKqhJ0fGzg.webp" alt="Phase error encoding circuit" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>This circuit produces the following logical encoding:</p>
+
+    \[
+      |\psi\rangle = a|0\rangle + b|1\rangle
+      \;\longrightarrow\;
+      |\psi\rangle_L = a|{+}{+}{+}\rangle + b|{-}{-}{-}\rangle
+    \]
+
+    <p>The logical qubit is now represented entirely in the \(\{|+\rangle, |-\rangle\}\) basis. With this encoding, any phase error acting on one of the three physical qubits behaves exactly like a bit flip error on that qubit &mdash; and we already know how to detect those.</p>
+
+    <h2>Parity Checking Circuits for Phase-Flip Errors</h2>
+
+    <p>After encoding the state into \(a|{+}{+}{+}\rangle + b|{-}{-}{-}\rangle\), we use the circuit below to detect phase-flip errors:</p>
+
+    <img src="../images/article_6/1_rRiOn_NNh1ipL_3NOx3YOw.webp" alt="Phase error parity checking circuit" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>The first three Hadamard gates transform the state from the \(\{|+\rangle, |-\rangle\}\) basis into the \(\{|0\rangle, |1\rangle\}\) basis. We then apply the same parity checks as before to determine which qubit disagrees. The second layer of Hadamard gates transforms the state back into the \(\{|+\rangle, |-\rangle\}\) basis.</p>
+
+    <p>Note that we are assuming the phase errors occur after the encoding circuit and before the error detection circuit. The circuit above is equivalent to the simpler form below:</p>
+
+    <img src="../images/article_6/1_beUMpDj3JYpieN-M8nC3jg.webp" alt="Simplified phase error detection circuit" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <h2>Putting It All Together</h2>
+
+    <p>The entire circuit from encoding to phase error detection is shown below:</p>
+
+    <img src="../images/article_6/1_VCsLWJdoyJvkhMb9FZzmHQ.webp" alt="Full phase error correction circuit" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>The syndrome measurement on the two ancilla qubits maps to the following error table:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Syndrome \((M_0\, M_1)\)</th>
+          <th>Error</th>
+          <th>Qubit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>00</td><td>No error</td><td>&mdash;</td></tr>
+        <tr><td>10</td><td>Phase flip \(Z\)</td><td>\(q_0\)</td></tr>
+        <tr><td>11</td><td>Phase flip \(Z\)</td><td>\(q_1\)</td></tr>
+        <tr><td>01</td><td>Phase flip \(Z\)</td><td>\(q_2\)</td></tr>
+      </tbody>
+    </table>
+    <p class="table-caption">Error syndromes for the 3-qubit phase-flip repetition code. \(M_0\) and \(M_1\) are the measurement outcomes of the ancilla qubits.</p>
+
+    <p>In the circuit, a phase error occurs on the second qubit, producing a syndrome of 11, indicating that we should apply a \(Z\) gate on the middle qubit to correct the error.</p>
+
+    <p>So far, we have seen how to independently correct bit-flip and phase-flip errors using parity-checking circuits. It is worth noting a key limitation: the bit-flip detection circuit is blind to phase errors, and the phase-flip detection circuit is also blind to bit errors.</p>
+
+    <p>In the next article, we will see how concatenating both circuits makes it possible to detect and correct both bit and phase flip errors simultaneously. You might ask why we are fixated on correcting only these two error types. It turns out that doing so allows us to correct any arbitrary single-qubit error &mdash; we will explore this in detail later.</p>
+
+    <div class="chapter-nav">
+      <a href="05-bit-flip-errors.html" class="nav-prev"><span class="nav-direction">&larr; Previous</span>Bit Flip Errors</a>
+      <a href="07-shors-code.html" class="nav-next"><span class="nav-direction">Next &rarr;</span>Shor&#x27;s Code</a>
+    </div>
   </main>
 
   <footer id="footer">
