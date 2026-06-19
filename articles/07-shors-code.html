@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shor&#x27;s Error Correction Code — Quantum Error Correction</title>
+  <title>Shor&#x27;s Error Correction Code &mdash; Quantum Error Correction</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" type="image/png" href="../favicon.png">
-  <script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]]},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};</script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
@@ -18,21 +19,21 @@
     <div class="book-author">by Boaz Micah</div>
   </div>
   <div id="sidebar-search">
-    <input id="sidebar-search-input" type="search" placeholder="Search articles… (press /)" aria-label="Search">
+    <input id="sidebar-search-input" type="search" placeholder="Search articles&hellip; (press /)" aria-label="Search">
   </div>
   <div id="sidebar-nav">
     <ul>
-<li class="section-label">Articles</li>
-<li class="nav-item"><a href="../articles/01-introduction.html"><span class="chapter-num">1.</span> Introduction</a></li>
-<li class="nav-item"><a href="../articles/02-classical-error-correction.html"><span class="chapter-num">2.</span> Classical Error Correction</a></li>
-<li class="nav-item"><a href="../articles/03-why-qec-is-hard.html"><span class="chapter-num">3.</span> Why QEC is Hard</a></li>
-<li class="nav-item"><a href="../articles/04-adding-redundancy.html"><span class="chapter-num">4.</span> Adding Redundancy</a></li>
-<li class="nav-item"><a href="../articles/05-bit-flip-errors.html"><span class="chapter-num">5.</span> Bit Flip Errors</a></li>
-<li class="nav-item"><a href="../articles/06-phase-errors.html"><span class="chapter-num">6.</span> Phase Errors</a></li>
-<li class="nav-item"><a href="../articles/07-shors-code.html" class="active"><span class="chapter-num">7.</span> Shor&#x27;s Code</a></li>
-<li class="nav-item"><a href="../articles/08-digitisation.html"><span class="chapter-num">8.</span> Digitisation of Errors</a></li>
-<li class="nav-item"><a href="../articles/09-simulating-shors-code.html"><span class="chapter-num">9.</span> Simulating with Stim</a></li>
-</ul>
+      <li class="section-label">Articles</li>
+      <li class="nav-item"><a href="../articles/01-introduction.html"><span class="chapter-num">1.</span> Introduction</a></li>
+      <li class="nav-item"><a href="../articles/02-classical-error-correction.html"><span class="chapter-num">2.</span> Classical Error Correction</a></li>
+      <li class="nav-item"><a href="../articles/03-why-qec-is-hard.html"><span class="chapter-num">3.</span> Why QEC is Hard</a></li>
+      <li class="nav-item"><a href="../articles/04-adding-redundancy.html"><span class="chapter-num">4.</span> Adding Redundancy</a></li>
+      <li class="nav-item"><a href="../articles/05-bit-flip-errors.html"><span class="chapter-num">5.</span> Bit Flip Errors</a></li>
+      <li class="nav-item"><a href="../articles/06-phase-errors.html"><span class="chapter-num">6.</span> Phase Errors</a></li>
+      <li class="nav-item"><a href="../articles/07-shors-code.html" class="active"><span class="chapter-num">7.</span> Shor&#x27;s Code</a></li>
+      <li class="nav-item"><a href="../articles/08-digitisation.html"><span class="chapter-num">8.</span> Digitisation of Errors</a></li>
+      <li class="nav-item"><a href="../articles/09-simulating-shors-code.html"><span class="chapter-num">9.</span> Simulating with Stim</a></li>
+    </ul>
   </div>
 </nav>
 
@@ -44,13 +45,126 @@
 
   <main id="content">
     <h1>Shor&#x27;s Error Correction Code</h1>
-<div class="article-meta">
-  <span>Boaz Micah</span>
-</div>
+    <div class="article-meta">
+      <span>Boaz Micah</span>
+    </div>
 
-<p>...</p>
+    <p>So far, we know how to independently detect and correct bit-flip errors and phase-flip errors. We saw that the circuit for detecting bit-flip errors is blind to phase errors, and vice versa. We want to be able to simultaneously detect and correct both types of errors. To do this, we concatenate both error-detection schemes into a single unified circuit. This is known as Shor's code.</p>
 
-<div class="chapter-nav"><a href="06-phase-errors.html" class="nav-prev"><span class="nav-direction">← Previous</span>Phase Errors</a><a href="08-digitisation.html" class="nav-next"><span class="nav-direction">Next →</span>Digitisation of Errors</a></div>
+    <h2>Encoding Circuit for Shor's Code</h2>
+
+    <p>The first step in any error correction protocol is to encode the qubit you are trying to protect using multiple physical qubits. For Shor's code, the encoding circuit is built by concatenating two simpler error-correction schemes.</p>
+
+    <p>Starting with the qubit we want to protect, we first apply the encoding circuit for detecting phase errors using three physical qubits. We then apply the encoding circuit for detecting bit-flip errors independently to each of those three qubits, expanding each one into a block of three. The result is a total of 9 physical qubits encoding a single logical qubit, as shown below:</p>
+
+    <img src="../images/article_7/1_iDVaaAM9Kd2PHBP0cv1niQ.png" alt="Shor's code encoding circuit" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>This 9-qubit structure is naturally thought of as three blocks of three qubits each: Block 0, Block 1, and Block 2. The encoding maps the logical basis states as follows:</p>
+
+    \begin{align}
+      |0\rangle &\mapsto \frac{1}{2\sqrt{2}} \big(|000\rangle + |111\rangle\big) \otimes \big(|000\rangle + |111\rangle\big) \otimes \big(|000\rangle + |111\rangle\big) \\[4pt]
+      |1\rangle &\mapsto \frac{1}{2\sqrt{2}} \big(|000\rangle - |111\rangle\big) \otimes \big(|000\rangle - |111\rangle\big) \otimes \big(|000\rangle - |111\rangle\big)
+    \end{align}
+
+    <h2>Useful Gate Identities</h2>
+
+    <p>Before discussing error detection, it is helpful to establish some identities relating \(X\) and \(Z\) gates to the CNOT gate. These identities allow us to track how \(Z\) errors propagate through the encoding circuit and are essential tools for analysing phase-error detection in Shor's code.</p>
+
+    <p>The images below give the gate identities between the \(X\) gate and the CNOT gate:</p>
+
+    <img src="../images/article_7/identity1.png" alt="X-CNOT identity 1" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+    <img src="../images/article_7/identity2.png" alt="X-CNOT identity 2" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+    <img src="../images/article_7/identity3.png" alt="X-CNOT identity 3" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>For \(Z\) gates and CNOT, the same relationships hold, but with the roles of the control and target qubits swapped:</p>
+
+    <img src="../images/article_7/identity4.png" alt="Z-CNOT identity 1" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+    <img src="../images/article_7/identity5.png" alt="Z-CNOT identity 2" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+    <img src="../images/article_7/identity6.png" alt="Z-CNOT identity 3" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>Each identity can be verified by carrying out the relevant matrix multiplications.</p>
+
+    <h2>Detecting Bit-Flip Errors</h2>
+
+    <p>Detecting bit-flip (\(X\)) errors in Shor's code is straightforward. We treat each of the three blocks separately and, within each block, apply a parity-checking circuit to ask: which qubit is different from the other two? This identifies any single-bit flip error within the block and tells us exactly which qubit to correct. The procedure can detect and correct up to one \(X\) error per block.</p>
+
+    <img src="../images/article_7/bit_flip_shor.png" alt="Bit-flip detection in Shor's code" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>In the circuit above, a bit-flip error occurs on the first qubit in the middle block. The parity-checking circuits for the first and third blocks return a syndrome of 00, indicating no errors. For the middle block, the syndrome is 10, indicating a flip on the first qubit. We correct this by applying an \(X\) gate to that qubit.</p>
+
+    <p>Note that detecting bit-flip errors requires 6 extra ancilla qubits to extract the syndrome.</p>
+
+    <h2>Detecting Phase Errors</h2>
+
+    <p>Detecting phase-flip (\(Z\)) errors is more subtle. Consider a \(Z\) error occurring on the bottom qubit in the middle block:</p>
+
+    <img src="../images/article_7/phase_error.png" alt="Phase error in Shor's code" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>Using the gate identities from the previous section, we can commute this \(Z\) error through the CNOT gates. Recall that for \(Z\) gates, a \(Z\) error on a target qubit propagates backwards through the CNOT to the control qubit. Within each block, the bit-encoding circuit is structured so that the lead qubit acts as the control for both other CNOTs in the block. This means that no matter which qubit in the block the \(Z\) error originates on, commuting it backwards through the chain always terminates at the lead qubit:</p>
+
+    <img src="../images/article_7/propagate_error.png" alt="Phase error propagation" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <blockquote>A \(Z\) error on any qubit within a block has the same net effect as a \(Z\) error on the lead qubit of that block.</blockquote>
+
+    <p>We cannot determine which qubit within a block experienced the phase flip &mdash; only which block was affected. The procedure for phase-error detection is:</p>
+
+    <ol>
+      <li>Decode the bit-flip encoding for all three blocks.</li>
+      <li>Apply the phase-error parity-checking circuit across the three lead qubits.</li>
+      <li>Read the syndrome to determine which block, if any, has experienced a phase flip.</li>
+      <li>Correct by applying \(Z\) to any qubit in the affected block.</li>
+      <li>Re-encode the bit-flip encoding to return to the full 9-qubit Shor code. Re-encoding is necessary because the decoding step temporarily strips away the bit-flip protection, leaving the qubits vulnerable until the next correction cycle begins.</li>
+    </ol>
+
+    <img src="../images/article_7/phase_and_bit.png" alt="Phase and bit error correction" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>Notice that detecting phase errors requires only 2 ancilla qubits, since we are checking parity across three lead qubits rather than within each block independently.</p>
+
+    <h2>Detecting Both Bit and Phase Errors Simultaneously</h2>
+
+    <p>What if a qubit experiences both a bit-flip and a phase-flip error at the same time? It turns out no additional machinery is required. Because \(X\) and \(Z\) anticommute:</p>
+
+    \[
+      XZ = -ZX
+    \]
+
+    <p>A combined \(XZ\) error is equivalent to \(ZX\) up to a global phase of \(-1\). Since global phases are physically unobservable, we can treat the \(X\) and \(Z\) components independently, in either order:</p>
+
+    <ol>
+      <li>Detect and correct the bit-flip component using the parity-checking circuit for \(X\) errors.</li>
+      <li>Decode the bit-flip encoding, apply the phase-flip parity-checking circuit, correct any \(Z\) error, and re-encode.</li>
+    </ol>
+
+    <p>The order can be reversed because the entire gate sequence for phase-error detection &mdash; the bit-flip decoding circuit together with the modified parity-checking circuit &mdash; is composed entirely of Hadamard and CNOT gates. Since \(X\) commutes with both \(H\) and CNOT, an \(X\) error produces the same syndrome regardless of whether it occurs before or after those gates. The two corrections are therefore completely independent.</p>
+
+    <img src="../images/article_7/both_errors.png" alt="Simultaneous bit and phase error correction" class="article-image" style="width:120%;margin-left:auto;margin-right:auto;">
+
+    <p>In the circuit above, both errors occur on the first qubit in the middle block. The \(X\)-error syndrome is 10, so we apply an \(X\) gate to correct the bit flip. The \(Z\)-error syndrome is then 11, indicating a phase flip in the middle block, which we correct with a \(Z\) gate before re-encoding.</p>
+
+    <p>This process can be repeated continuously as time progresses. Shor's code will correctly identify and fix errors provided that at most one bit-flip error occurs per block and at most one phase error affects any one block.</p>
+
+    <h2>When Does Shor's Code Actually Help?</h2>
+
+    <p>Shor's code uses 9 physical qubits. Assuming each qubit independently experiences an error with probability \(p\), the code fails when two or more qubits are affected. The logical failure probability is:</p>
+
+    \[
+      P_2 = 1 - (1-p)^9 - 9p(1-p)^8
+    \]
+
+    <p>The first term accounts for the probability that all 9 qubits are error-free, and the second for the probability that exactly one qubit is affected &mdash; the only two cases Shor's code can handle. Everything else is a logical failure.</p>
+
+    <p>Shor's code only helps when \(P_2 < p\), i.e. when it produces fewer logical errors than an unencoded qubit would. Setting \(P_2 = p\) and solving numerically gives a crossover at \(p \approx 0.0323\):</p>
+
+    <img src="../images/article_7/threshold.png" alt="Shor's code threshold plot" class="article-image" style="width:50%;margin-left:auto;margin-right:auto;">
+
+    <p>Below this threshold, the redundancy reduces the logical error rate. Above it, the additional qubits introduce more opportunities for error than the redundancy can fix. This is a fundamental constraint: error correction requires that the underlying hardware already be reliable.</p>
+
+    <p>Next, we will find out that correcting for bit and phase errors alone is sufficient to correct any arbitrary single-qubit error.</p>
+
+    <div class="chapter-nav">
+      <a href="06-phase-errors.html" class="nav-prev"><span class="nav-direction">&larr; Previous</span>Phase Errors</a>
+      <a href="08-digitisation.html" class="nav-next"><span class="nav-direction">Next &rarr;</span>Digitisation of Errors</a>
+    </div>
   </main>
 
   <footer id="footer">
